@@ -1,0 +1,36 @@
+version: '3.3'
+services:
+    web:
+      #build: ./dodemo/                 
+      image: infraconsol_web
+      ports:
+        - "80:9080"
+      deploy:
+        replicas: 1
+        resources:
+          limits:
+            cpus: '0.50'
+            memory: 500M
+        restart_policy:
+          condition: on-failure            
+      depends_on:
+        - sqlserver
+               
+    sqlserver:
+      ports:
+        - 3306:3306
+      #build: ./mysqlinit/
+      image: infraconsol_sqlserver
+      environment:
+        MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+        MYSQL_USER: "root"
+        MYSQL_PASSWORD:
+      deploy:
+        replicas: 1
+        resources:
+          limits:
+            cpus: '0.50'
+            memory: 500M    
+        restart_policy:
+          condition: on-failure  
+
